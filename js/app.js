@@ -1,8 +1,27 @@
 /*
  * Create a list that holds all of your cards
  */
-let cards = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb', 'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'];
+let cards = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb', 'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb']; //classes for font awesome
+const deck = document.getElementsByClassName('deck');
+//const start = document.querySelector('.restart');
 
+document.addEventListener('DOMContentLoaded', buildDeck()); //builds deck on load
+
+//start.addEventListener('onclick', buildDeck());
+
+function buildDeck() {
+    shuffle(cards); //shuffles the array
+
+    for (let i = 0; i <= cards.length - 1; i += 1) { //creates 16 cards using the shuffled cards array
+
+        const listItem = document.createElement('li');
+
+        listItem.className = 'card open show';
+        listItem.innerHTML = '<i class="fa ' + cards[i] + '"></i>';
+
+        deck[0].appendChild(listItem);
+    }
+}
 
 /*
  * Display the cards on the page
@@ -10,30 +29,6 @@ let cards = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube'
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-
-document.addEventListener("DOMContentLoaded", buildDeck()); //when DOM is loaded calls build deck function
-
-function buildDeck() {
-    const newList = document.createElement('ul'); //creates new ul without li
-
-    newList.className = 'deck'; //adds class to ul above
-    const mainContain = document.querySelector('.container');
-
-    mainContain.appendChild('newList'); //appends ul as last child to main div
-
-    shuffle(cards); //shuffles the cards array
-
-    for (let i = 0; i <= cards.Length - 1; i++) { //creates 16 cards
-        const listItem = document.createElement('li');
-
-        listItem.className = 'card'; //adds class to li
-
-        listItem.innerHTML = '<i class="fa" ' + cards[i] + '></i>'; //adds fontawesome through array new order to li, thus creating the ul inside the comments of HTML file
-        newList.appendChild(listItem);
-    }
-}
-
-// document.body.appendChild(fragment);
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -61,4 +56,3 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-// https://github.com/shannonj498/memory-matching-game/blob/master/js/app.js
