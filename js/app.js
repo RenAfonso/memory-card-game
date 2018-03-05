@@ -2,26 +2,8 @@
  * Create a list that holds all of your cards
  */
 let cards = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb', 'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb']; //classes for font awesome
-const deck = document.getElementsByClassName('deck');
-//const start = document.querySelector('.restart');
-
-document.addEventListener('DOMContentLoaded', buildDeck()); //builds deck on load
-
-//start.addEventListener('onclick', buildDeck());
-
-function buildDeck() {
-    shuffle(cards); //shuffles the array
-
-    for (let i = 0; i <= cards.length - 1; i += 1) { //creates 16 cards using the shuffled cards array
-
-        const listItem = document.createElement('li');
-
-        listItem.className = 'card open show';
-        listItem.innerHTML = '<i class="fa ' + cards[i] + '"></i>';
-
-        deck[0].appendChild(listItem);
-    }
-}
+let deck = document.getElementsByClassName('deck');
+const start = document.querySelector('.restart');
 
 /*
  * Display the cards on the page
@@ -29,6 +11,38 @@ function buildDeck() {
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+
+document.addEventListener('DOMContentLoaded', buildDeck()); //builds deck on load
+
+function buildDeck() {
+    const fragment = document.createDocumentFragment(); // uses a DocumentFragment instead of a <div>
+
+    shuffle(cards); //shuffles the array
+
+    for (let i = 0; i <= cards.length - 1; i += 1) { //cycles through the length of the array cards
+
+        const listItem = document.createElement('li'); //creates list element for each string in the array
+
+        listItem.className = 'card'; //adds class to each list element
+        listItem.innerHTML = '<i class="fa ' + cards[i] + '"></i>'; //adds fontawesome to each list element
+
+        fragment.appendChild(listItem); //appends list elements to deck element runs the code
+    }
+    deck[0].appendChild(fragment);
+}
+
+start.addEventListener('click', rebuildDeck);
+
+function rebuildDeck() {
+    /*if (deck.firsElementChild !== 0) {
+        deck.removeChild(listItem);
+    } else {
+        alert('hi');
+    }*/
+    deck.innerHTML = "";
+
+    //buildDeck();
+}
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
