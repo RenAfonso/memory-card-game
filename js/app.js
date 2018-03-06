@@ -4,16 +4,17 @@
 let timer; //for counting time
 let moves = 0; //for counting moves
 let sec = 0; //counts time...
-let flip_first = false; //to check first flipped card
+let flipFirst = 1; //to check first flipped card
 let flipped = []; //stores flipped cards
 let matched = []; //stores matched cards
 let cards = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb', 'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb']; //classes for font awesome
+let cardid = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']; //id for cards
 
 /*
- * variables used to call nodes or elements
+ * variables used to call deck or elements
  */
 const deck = document.getElementsByClassName('deck');
-const start = document.querySelector('.restart');
+const start = document.getElementsByClassName('restart');
 const firstStar = document.getElementById('first-star');
 const secondStar = document.getElementById('second-star');
 const thirdStar = document.getElementById('third-star');
@@ -36,20 +37,15 @@ function buildDeck() {
 
         const listItem = document.createElement('li'); //creates list element for each string in the array
 
+        listItem.id = cardid[i];
         listItem.className = 'card'; //adds class to each list element
         listItem.innerHTML = '<i class="fa ' + cards[i] + '"></i>'; //adds fontawesome to each list element
 
         fragment.appendChild(listItem); //appends list elements to deck element runs the code
     }
     deck[0].appendChild(fragment);
-}
 
-const card = document.getElementsByClassName('card'); //calls recently created li items
-
-card.addEventListener('click', flipCard);
-
-function flipCard() {
-    card.classList.add('open');
+    addClick(); //adds click event listener to each card
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -78,3 +74,27 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+// loops through all .card elements and adds the event listener to each
+function addClick() {
+    const card = document.getElementsByClassName('card');
+
+    for (let i = 0; i < card.length; i++) {
+        card[i].addEventListener('click', clickCard); //calls function to check first click on .card click
+    }
+}
+
+//checks if it's the first click.
+function clickCard() {
+    if (flipFirst) { //if it's the first click, starts the timer,calls the function that flips the card
+        //start timer function
+        flipCard(this);
+        flipFirst = 0;
+    } else { //if not      
+        flipCard(this);
+    }
+}
+
+function flipCard(item) {
+    item.className = 'card open show';
+}
