@@ -1,9 +1,22 @@
 /*
- * Create a list that holds all of your cards
+ * variables used for gameplay
  */
+let timer; //for counting time
+let moves = 0; //for counting moves
+let sec = 0; //counts time...
+let flip_first = false; //to check first flipped card
+let flipped = []; //stores flipped cards
+let matched = []; //stores matched cards
 let cards = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb', 'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb']; //classes for font awesome
-let deck = document.getElementsByClassName('deck');
+
+/*
+ * variables used to call nodes or elements
+ */
+const deck = document.getElementsByClassName('deck');
 const start = document.querySelector('.restart');
+const firstStar = document.getElementById('first-star');
+const secondStar = document.getElementById('second-star');
+const thirdStar = document.getElementById('third-star');
 
 /*
  * Display the cards on the page
@@ -31,17 +44,12 @@ function buildDeck() {
     deck[0].appendChild(fragment);
 }
 
-start.addEventListener('click', rebuildDeck);
+const card = document.getElementsByClassName('card'); //calls recently created li items
 
-function rebuildDeck() {
-    /*if (deck.firsElementChild !== 0) {
-        deck.removeChild(listItem);
-    } else {
-        alert('hi');
-    }*/
-    deck.innerHTML = "";
+card.addEventListener('click', flipCard);
 
-    //buildDeck();
+function flipCard() {
+    card.classList.add('open');
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
