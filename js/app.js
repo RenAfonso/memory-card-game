@@ -40,12 +40,13 @@ function buildDeck() {
         listItem.id = cardid[i];
         listItem.className = 'card'; //adds class to each list element
         listItem.innerHTML = '<i class="fa ' + cards[i] + '"></i>'; //adds fontawesome to each list element
+        listItem.addEventListener('click', clickCard);
 
         fragment.appendChild(listItem); //appends list elements to deck element runs the code
     }
     deck[0].appendChild(fragment);
 
-    addClick(); //adds click event listener to each card
+    //addClick(); //adds click event listener to each card
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -76,25 +77,40 @@ function shuffle(array) {
  */
 
 // loops through all .card elements and adds the event listener to each
-function addClick() {
+/*function addClick() {
     const card = document.getElementsByClassName('card');
 
     for (let i = 0; i < card.length; i++) {
         card[i].addEventListener('click', clickCard); //calls function to check first click on .card click
     }
-}
+}*/
 
-//checks if it's the first click.
+//function checks if it's the first click.
 function clickCard() {
-    if (flipFirst) { //if it's the first click, starts the timer,calls the function that flips the card
+    if (flipFirst) { //if first click, starts the timer,calls the function that flips the card and sets const to false
         //start timer function
         flipCard(this);
         flipFirst = 0;
-    } else { //if not      
+    } else { //calls the function that flips the card
         flipCard(this);
     }
 }
 
 function flipCard(item) {
-    item.className = 'card open show';
+    const openCard = item.innerHTML;
+
+    item.className = 'card open show flip';
+    flipped.push(openCard);
+
+    testMatch(flipped);
+}
+
+function testMatch(array) {   
+    if (array.length === 2) {
+        if (array[0] === array[1]) {
+            alert('found me');
+        }
+    } else {
+        alert('one move too many');
+    }
 }
