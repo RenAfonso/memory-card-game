@@ -5,15 +5,17 @@ let timer; //for counting time
 let moves = 0; //for counting moves
 let sec = 0; //counts time...
 let flipFirst = 1; //to check first flipped card
-let flipped = []; //stores flipped cards
+let flippedSymbol = []; //stores flipped font awesome for comparison
+let flippedId = []; //stores flipped card ID
 let matched = []; //stores matched cards
 let cards = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb', 'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb']; //classes for font awesome
 let cardid = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']; //id for cards
-
+let teste;
+//let secondId;
 /*
  * variables used to call deck or elements
  */
-const deck = document.getElementsByClassName('deck');
+const deck = document.getElementById('deck');
 const start = document.getElementsByClassName('restart');
 const firstStar = document.getElementById('first-star');
 const secondStar = document.getElementById('second-star');
@@ -40,13 +42,12 @@ function buildDeck() {
         listItem.id = cardid[i];
         listItem.className = 'card'; //adds class to each list element
         listItem.innerHTML = '<i class="fa ' + cards[i] + '"></i>'; //adds fontawesome to each list element
-        listItem.addEventListener('click', clickCard);
+        //listItem.addEventListener('click', clickCard);
 
         fragment.appendChild(listItem); //appends list elements to deck element runs the code
     }
-    deck[0].appendChild(fragment);
 
-    //addClick(); //adds click event listener to each card
+    deck.appendChild(fragment);
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -63,7 +64,6 @@ function shuffle(array) {
 
     return array;
 }
-
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -84,33 +84,63 @@ function shuffle(array) {
         card[i].addEventListener('click', clickCard); //calls function to check first click on .card click
     }
 }*/
+deck.addEventListener('click', clickCard);
 
 //function checks if it's the first click.
-function clickCard() {
+function clickCard(evt) {
     if (flipFirst) { //if first click, starts the timer,calls the function that flips the card and sets const to false
         //start timer function
-        flipCard(this);
+        flipCard(evt.target);
         flipFirst = 0;
     } else { //calls the function that flips the card
-        flipCard(this);
+        flipCard(evt.target);
     }
 }
 
+//function that flips cards and tests for matches
 function flipCard(item) {
-    const openCard = item.innerHTML;
+    let openCard = item.innerHTML;
+    let openId = item.getAttribute('id');
 
-    item.className = 'card open show flip';
-    flipped.push(openCard);
+    flippedSymbol.push(openCard);
+    flippedId.push(openId);
 
-    testMatch(flipped);
-}
+    if (flippedSymbol.length === 2) {
+        moves += 1;
 
-function testMatch(array) {   
-    if (array.length === 2) {
-        if (array[0] === array[1]) {
-            alert('found me');
+        let secondId = flippedId.pop();
+        let firstId = flippedId.pop();
+
+        let firstCard = document.getElementById(firstId);
+        let secondCard = document.getElementById(secondId);
+
+        if (flippedSymbol[0] === flippedSymbol[1]) {
+            firstCard.classList.remove('open');
+            firstCard.classList.add('match');
+            secondCard.classList.add('match');
+        } else {
+            secondCard.classList.add('open');
+            secondCard.classList.add('show');
+            setTimeout(function() {
+                secondCard.classList.remove('show');
+                secondCard.classList.remove('open');
+                firstCard.classList.remove('show');
+                firstCard.classList.remove('open');
+            }, 1100)
         }
+        flippedSymbol.length = 0;
     } else {
-        alert('one move too many');
+        item.classList.add('open');
+        item.classList.add('show');
     }
 }
+
+    /*if (array[0] === array[1]) {
+        firstItem.classList.remove('open');
+        firstItem.classList.add('match');
+        secondItem.classList.add('match');
+        //testWin();
+    } else {
+        secondItem.classList.add('open');
+        secondItem.classList.add('show');
+    }*/
