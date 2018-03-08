@@ -6,6 +6,7 @@
     <meta name="description" content="">
     <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Coda">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monoton">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="node_modules/sweetalert2/dist/sweetalert2.css">
 </head>
@@ -13,20 +14,26 @@
 
     <div class="container">
         <header>
-            <h1>Matching Game</h1>
+            <h1 class="title">Matching Game</h1>
         </header>
 
         <section class="score-panel">
-        	<ul class="stars">
+            <div class="moves-panel">
+                <p>Moves: <span id="moves">0</span></p>
+            </div>
+
+            <div class="clock">
+                <label class="time"><span id="timer">00 </span>sec</label>
+            </div>
+            
+            <ul class="stars">
         		<li id="first-star"><i class="fa fa-star"></i></li>
         		<li id="second-star"><i class="fa fa-star"></i></li>
         		<li id="third-star"><i class="fa fa-star"></i></li>
         	</ul>
 
-        	<span id="moves">0</span> Moves
-
             <div id='new' class="restart">
-        		<i class="fa fa-repeat"></i>
+        		<input type="submit" value="New game">
         	</div>
         </section>
 

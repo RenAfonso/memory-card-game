@@ -1,6 +1,6 @@
 // variables used for:
-let startTimer; // counting time
-let stopTimer; // counting time
+let seconds; //counting time
+let countSeconds;
 let moves = 0; // counting moves
 let flipFirst = 1; // to check first flipped card
 let flippedSymbol = []; // stores flipped font awesome comparison
@@ -9,14 +9,14 @@ let matched = []; // stores matched cards
 let cards = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb', 'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb']; //classes for font awesome
 let cardid = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']; //id for cards
 
-
 // variables used to call elements
 const deck = document.getElementById('deck');
 const newDeck = document.getElementById('new');
+const regMoves = document.getElementById('moves');
+const timer = document.getElementById('timer');
 const firstStar = document.getElementById('first-star');
 const secondStar = document.getElementById('second-star');
 const thirdStar = document.getElementById('third-star');
-const regMoves = document.getElementById('moves');
 
 // calls function to build the deck when DOM is loaded
 document.addEventListener('DOMContentLoaded', buildDeck());
@@ -68,27 +68,35 @@ newDeck.addEventListener('click', rebuild);
 
 //function that resets the counter for first card flipped, moves counter, star color and rebuilds the deck
 function rebuild() {
-    flipFirst = 1;
-    moves = 0;
-    regMoves.textContent = moves;
-
-    thirdStar.firstChild.style.color = '#bdbd00';
-    secondStar.firstChild.style.color = '#bdbd00';
-    firstStar.firstChild.style.color = '#bdbd00';
+    resetVariables();
 
     deck.innerHTML = '';
 
     buildDeck();
 }
+
+function resetVariables () {
+    matched = [];
+    flipFirst = 1;
+    moves = 0;
+    seconds = 0;
+    timer.innerHTML = "00";
+    regMoves.textContent = moves;
+
+    thirdStar.firstChild.style.color = '#bdbd00';
+    secondStar.firstChild.style.color = '#bdbd00';
+    firstStar.firstChild.style.color = '#bdbd00';
+}
+
 // adds event listener to click cards and flip them (gameplay)
 deck.addEventListener('click', clickCard);
 
 // function checks if it's the first click, calls function that flips cards and checks for game win
 function clickCard(evt) {
     if (flipFirst) {
-        start();
         flipCard(evt.target);
         flipFirst = 0;
+        start();
     } else {
         flipCard(evt.target);
         checkWin();
@@ -140,35 +148,53 @@ function flipCard(item) {
 // function to count stars by changing color to grey as moves increment
 function countStars() {
     if (moves >= 24) {
-        firstStar.firstChild.style.color = '#a9a9a9';
+        firstStar.firstChild.style.color = '#2e3d49';
     } else if (moves >= 20) {
-        secondStar.firstChild.style.color = '#a9a9a9';
+        secondStar.firstChild.style.color = '#2e3d49';
     } else if (moves >= 14) {
-        thirdStar.firstChild.style.color = '#a9a9a9';
+        thirdStar.firstChild.style.color = '#2e3d49';
     }
 }
 
 // function to check if all cards were matched and game is won
 function checkWin() {
-    if (matched.length === 16) {
+    if (matched.length === 2) {
         end();
     }
 }
 
-// timer function to start counting ellapsed time
+// timer function to start counting ellapsed time using setInterval
 function start() {
-    startTimer = new Date();
+    seconds = 0;
+
+    countSeconds = setInterval(countTime, 1000);
+}
+
+// increments time and writes to html
+function countTime() {
+    seconds += 1;
+
+    if (seconds >= 10) {
+        timer.innerHTML = seconds;
+    } else {
+        timer.innerHTML = '0' + seconds;
+    }
 }
 
 // timer function to stop counting ellapsed time, display game duration and congratulation message (sweetalert2)
 function end() {
-    stopTimer = new Date();
-    let seconds = stopTimer - startTimer;
+    clearInterval(countSeconds);
 
-    seconds /= 1000; //from ms to s
-    swal(
-        'Congratulations!',
-        'You took ' + seconds + ' seconds to complete this card game!',
-        'success'
-    );
+    swal({
+        title: 'Congratulations!',
+        type: 'success',
+        html: 'You took ' + seconds + ' seconds to complete this card game!',
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'I want to play more!',
+        confirmButtonAriaLabel: 'Thumbs up, great!',
+        cancelButtonText: 'That was enough...',
+        cancelButtonAriaLabel: 'Thumbs down',
+      })
 }
