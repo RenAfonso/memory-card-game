@@ -1,34 +1,26 @@
-/*
- * variables used for gameplay
- */
-let timer; //for counting time
-let moves = 0; //for counting moves
-let sec = 0; //counts time...
-let flipFirst = 1; //to check first flipped card
-let flippedSymbol = []; //stores flipped font awesome for comparison
-let flippedId = []; //stores flipped card ID
-let matched = []; //stores matched cards
+// variables used for:
+let startTimer; // counting time
+let stopTimer; // counting time
+let moves = 0; // counting moves
+let flipFirst = 1; // to check first flipped card
+let flippedSymbol = []; // stores flipped font awesome comparison
+let flippedId = []; // stores flipped card ID
+let matched = []; // stores matched cards
 let cards = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb', 'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb']; //classes for font awesome
 let cardid = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']; //id for cards
-let teste;
-//let secondId;
-/*
- * variables used to call deck or elements
- */
+
+
+// variables used to call elements
 const deck = document.getElementById('deck');
-const start = document.getElementsByClassName('restart');
+const newDeck = document.getElementById('new');
 const firstStar = document.getElementById('first-star');
 const secondStar = document.getElementById('second-star');
 const thirdStar = document.getElementById('third-star');
+const regMoves = document.getElementById('moves');
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
+// class function to build the deck when DOM is loaded
 document.addEventListener('DOMContentLoaded', buildDeck()); //builds deck on load
+
 
 function buildDeck() {
     const fragment = document.createDocumentFragment(); // uses a DocumentFragment instead of a <div>
@@ -39,15 +31,15 @@ function buildDeck() {
 
         const listItem = document.createElement('li'); //creates list element for each string in the array
 
-        listItem.id = cardid[i];
+        listItem.id = cardid[i]; //adds id in sequential order to each li element
         listItem.className = 'card'; //adds class to each list element
         listItem.innerHTML = '<i class="fa ' + cards[i] + '"></i>'; //adds fontawesome to each list element
-        //listItem.addEventListener('click', clickCard);
 
         fragment.appendChild(listItem); //appends list elements to deck element runs the code
     }
 
     deck.appendChild(fragment);
+
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -76,24 +68,34 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-// loops through all .card elements and adds the event listener to each
-/*function addClick() {
-    const card = document.getElementsByClassName('card');
+newDeck.addEventListener('click', rebuild);
 
-    for (let i = 0; i < card.length; i++) {
-        card[i].addEventListener('click', clickCard); //calls function to check first click on .card click
-    }
-}*/
+//function that resets the counter for first card flipped, moves counter, star color and rebuilds the deck
+function rebuild() {
+    flipFirst = 1;
+    moves = 0;
+    regMoves.textContent = moves;
+
+    thirdStar.firstChild.style.color = '#bdbd00';
+    secondStar.firstChild.style.color = '#bdbd00';
+    firstStar.firstChild.style.color = '#bdbd00';
+
+    deck.innerHTML = '';
+
+    buildDeck();
+}
+
 deck.addEventListener('click', clickCard);
 
 //function checks if it's the first click.
 function clickCard(evt) {
-    if (flipFirst) { //if first click, starts the timer,calls the function that flips the card and sets const to false
-        //start timer function
+    if (flipFirst) { //if first click, starts the timer, calls the function that flips the card and sets const to false
+        start();
         flipCard(evt.target);
         flipFirst = 0;
-    } else { //calls the function that flips the card
+    } else { //calls the function that flips the card and checks if the flipped card equates to a win
         flipCard(evt.target);
+        checkWin();
     }
 }
 
@@ -107,6 +109,9 @@ function flipCard(item) {
 
     if (flippedSymbol.length === 2) {
         moves += 1;
+        regMoves.textContent = moves;
+
+        countStars();
 
         let secondId = flippedId.pop();
         let firstId = flippedId.pop();
@@ -118,15 +123,16 @@ function flipCard(item) {
             firstCard.classList.remove('open');
             firstCard.classList.add('match');
             secondCard.classList.add('match');
+            matched.push(firstId, secondId);
         } else {
             secondCard.classList.add('open');
             secondCard.classList.add('show');
-            setTimeout(function() {
+            setTimeout(() => {
                 secondCard.classList.remove('show');
-                secondCard.classList.remove('open');
                 firstCard.classList.remove('show');
+                secondCard.classList.remove('open');
                 firstCard.classList.remove('open');
-            }, 1100)
+            }, 500);
         }
         flippedSymbol.length = 0;
     } else {
@@ -135,12 +141,38 @@ function flipCard(item) {
     }
 }
 
-    /*if (array[0] === array[1]) {
-        firstItem.classList.remove('open');
-        firstItem.classList.add('match');
-        secondItem.classList.add('match');
-        //testWin();
-    } else {
-        secondItem.classList.add('open');
-        secondItem.classList.add('show');
-    }*/
+//function to count stars by changing color to grey as moves increment
+function countStars() {
+    if (moves >= 24) {
+        firstStar.firstChild.style.color = '#a9a9a9';
+    } else if (moves >= 20) {
+        secondStar.firstChild.style.color = '#a9a9a9';
+    } else if (moves >= 14) {
+        thirdStar.firstChild.style.color = '#a9a9a9';
+    }
+}
+
+//function to check if all cards were matched and game is won
+function checkWin() {
+    if (matched.length === 16) {
+        end();
+    }
+}
+
+//timer function to start counting ellapsed time
+function start() {
+    startTimer = new Date();
+}
+
+//timer function to stop counting ellapsed time, display game duration and congratulation message
+function end() {
+    stopTimer = new Date();
+    let seconds = stopTimer - startTimer;
+
+    seconds /= 1000; //from ms to s
+    swal(
+        'Congratulations!',
+        'You took ' + seconds + ' seconds to complete this card game!',
+        'success'
+    );
+}
