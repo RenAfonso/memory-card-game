@@ -18,24 +18,30 @@ const secondStar = document.getElementById('second-star');
 const thirdStar = document.getElementById('third-star');
 const regMoves = document.getElementById('moves');
 
-// class function to build the deck when DOM is loaded
-document.addEventListener('DOMContentLoaded', buildDeck()); //builds deck on load
+// calls function to build the deck when DOM is loaded
+document.addEventListener('DOMContentLoaded', buildDeck());
 
-
+/*
+ * builds the deck:
+ * - creates a fragment
+ * - shuffles the array which contains the font awesome icons
+ * - loops through array to create list elements with id (sequential one to sixteen in this order), class and random font awesome icon from array
+ * - appends all to fragment and fragment to parent unordered list element
+ */
 function buildDeck() {
-    const fragment = document.createDocumentFragment(); // uses a DocumentFragment instead of a <div>
+    const fragment = document.createDocumentFragment();
 
-    shuffle(cards); //shuffles the array
+    shuffle(cards);
 
-    for (let i = 0; i <= cards.length - 1; i += 1) { //cycles through the length of the array cards
+    for (let i = 0; i <= cards.length - 1; i += 1) {
 
-        const listItem = document.createElement('li'); //creates list element for each string in the array
+        const listItem = document.createElement('li');
 
-        listItem.id = cardid[i]; //adds id in sequential order to each li element
-        listItem.className = 'card'; //adds class to each list element
-        listItem.innerHTML = '<i class="fa ' + cards[i] + '"></i>'; //adds fontawesome to each list element
+        listItem.id = cardid[i];
+        listItem.className = 'card';
+        listItem.innerHTML = '<i class="fa ' + cards[i] + '"></i>';
 
-        fragment.appendChild(listItem); //appends list elements to deck element runs the code
+        fragment.appendChild(listItem);
     }
 
     deck.appendChild(fragment);
@@ -57,17 +63,7 @@ function shuffle(array) {
     return array;
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
+// adds event listener that calls function to rebuild the deck
 newDeck.addEventListener('click', rebuild);
 
 //function that resets the counter for first card flipped, moves counter, star color and rebuilds the deck
@@ -84,22 +80,22 @@ function rebuild() {
 
     buildDeck();
 }
-
+// adds event listener to click cards and flip them (gameplay)
 deck.addEventListener('click', clickCard);
 
-//function checks if it's the first click.
+// function checks if it's the first click, calls function that flips cards and checks for game win
 function clickCard(evt) {
-    if (flipFirst) { //if first click, starts the timer, calls the function that flips the card and sets const to false
+    if (flipFirst) {
         start();
         flipCard(evt.target);
         flipFirst = 0;
-    } else { //calls the function that flips the card and checks if the flipped card equates to a win
+    } else {
         flipCard(evt.target);
         checkWin();
     }
 }
 
-//function that flips cards and tests for matches
+// function that flips cards, tests matching cards, adds and removes classes accordingly, calls function to change stars and increases moves counter
 function flipCard(item) {
     let openCard = item.innerHTML;
     let openId = item.getAttribute('id');
@@ -132,7 +128,7 @@ function flipCard(item) {
                 firstCard.classList.remove('show');
                 secondCard.classList.remove('open');
                 firstCard.classList.remove('open');
-            }, 500);
+            }, 650);
         }
         flippedSymbol.length = 0;
     } else {
@@ -141,7 +137,7 @@ function flipCard(item) {
     }
 }
 
-//function to count stars by changing color to grey as moves increment
+// function to count stars by changing color to grey as moves increment
 function countStars() {
     if (moves >= 24) {
         firstStar.firstChild.style.color = '#a9a9a9';
@@ -152,19 +148,19 @@ function countStars() {
     }
 }
 
-//function to check if all cards were matched and game is won
+// function to check if all cards were matched and game is won
 function checkWin() {
     if (matched.length === 16) {
         end();
     }
 }
 
-//timer function to start counting ellapsed time
+// timer function to start counting ellapsed time
 function start() {
     startTimer = new Date();
 }
 
-//timer function to stop counting ellapsed time, display game duration and congratulation message
+// timer function to stop counting ellapsed time, display game duration and congratulation message (sweetalert2)
 function end() {
     stopTimer = new Date();
     let seconds = stopTimer - startTimer;
