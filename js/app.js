@@ -2,6 +2,7 @@
 let seconds; //counting time
 let countSeconds;
 let moves = 0; // counting moves
+let finalStars; // for displaying stars
 let flipFirst = 1; // to check first flipped card
 let flippedSymbol = []; // stores flipped font awesome comparison
 let flippedId = []; // stores flipped card ID
@@ -17,6 +18,9 @@ const timer = document.getElementById('timer');
 const firstStar = document.getElementById('first-star');
 const secondStar = document.getElementById('second-star');
 const thirdStar = document.getElementById('third-star');
+const modal = document.getElementById('myModal');
+const close = document.getElementById('close');
+const again = document.getElementById('again');
 
 // calls function to build the deck when DOM is loaded
 document.addEventListener('DOMContentLoaded', buildDeck());
@@ -66,8 +70,9 @@ function shuffle(array) {
 // adds event listener that calls function to rebuild the deck
 newDeck.addEventListener('click', rebuild);
 
-//function that resets the counter for first card flipped, moves counter, star color and rebuilds the deck
+//function that resets the counter for first card flipped, moves counter, timer, star color and rebuilds the deck
 function rebuild() {
+    clearInterval(countSeconds);
     resetVariables();
 
     deck.innerHTML = '';
@@ -111,11 +116,12 @@ function flipCard(item) {
     flippedSymbol.push(openCard);
     flippedId.push(openId);
 
+    // open a second card
     if (flippedSymbol.length === 2) {
         moves += 1;
         regMoves.textContent = moves;
 
-        countStars();
+        calcStars();
 
         let secondId = flippedId.pop();
         let firstId = flippedId.pop();
@@ -123,22 +129,33 @@ function flipCard(item) {
         let firstCard = document.getElementById(firstId);
         let secondCard = document.getElementById(secondId);
 
+        // matched cards
         if (flippedSymbol[0] === flippedSymbol[1]) {
             firstCard.classList.remove('open');
             firstCard.classList.add('match');
             secondCard.classList.add('match');
             matched.push(firstId, secondId);
+            firstCard.removeEventListener('click', clickCard);
+            secondCard.removeEventListener('click', clickCard);
+        // not matched
         } else {
             secondCard.classList.add('open');
             secondCard.classList.add('show');
             setTimeout(() => {
+                firstCard.classList.add('not');
+                firstCard.classList.remove('open');
+                secondCard.classList.add('not');
+                secondCard.classList.remove('open');
+            }, 500);
+            setTimeout(() => {
                 secondCard.classList.remove('show');
                 firstCard.classList.remove('show');
-                secondCard.classList.remove('open');
-                firstCard.classList.remove('open');
-            }, 650);
+                secondCard.classList.remove('not');
+                firstCard.classList.remove('not');
+            }, 750);
         }
         flippedSymbol.length = 0;
+    // open a random card
     } else {
         item.classList.add('open');
         item.classList.add('show');
@@ -146,7 +163,7 @@ function flipCard(item) {
 }
 
 // function to count stars by changing color to grey as moves increment
-function countStars() {
+function calcStars() {
     if (moves >= 24) {
         firstStar.firstChild.style.color = '#2e3d49';
     } else if (moves >= 20) {
@@ -158,7 +175,7 @@ function countStars() {
 
 // function to check if all cards were matched and game is won
 function checkWin() {
-    if (matched.length === 2) {
+    if (matched.length === 16) {
         end();
     }
 }
@@ -185,16 +202,40 @@ function countTime() {
 function end() {
     clearInterval(countSeconds);
 
-    swal({
-        title: 'Congratulations!',
-        type: 'success',
-        html: 'You took ' + seconds + ' seconds to complete this card game!',
-        showCloseButton: true,
-        showCancelButton: true,
-        focusConfirm: false,
-        confirmButtonText: 'I want to play more!',
-        confirmButtonAriaLabel: 'Thumbs up, great!',
-        cancelButtonText: 'That was enough...',
-        cancelButtonAriaLabel: 'Thumbs down',
-      })
+    const star = '<i class="fa fa-star"></i>';
+
+    if (moves >= 24) {
+        finalStars = '';
+    } else if (moves >= 20) {
+        finalStars = star;
+    } else if (moves >= 14) {
+        finalStars = star + star;
+    } else {
+        finalStars = star + star + star;
+    }
+
+    openModal();
+}
+
+// function that opens the modal and displays a play again and close buttons
+function openModal() {
+    const displayStars = document.getElementById('display-stars');
+    const displaySeconds = document.getElementById('display-seconds');
+
+    displayStars.innerHTML = finalStars;
+    displaySeconds.innerHTML = seconds;
+    modal.style.display = "block";
+
+    close.addEventListener('click', closeModal);
+    again.addEventListener('click', playAgain);
+}
+
+// When the user clicks on <span> (x), close the modal
+function closeModal() {
+    modal.style.display = 'none';
+}
+
+function playAgain() {
+    modal.style.display = 'none';
+    rebuild();
 }

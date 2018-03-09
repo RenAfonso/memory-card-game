@@ -31,6 +31,7 @@ body {
 .title {
     font-family: Monoton;
     font-size: 65px;
+    color: #2e3d49;
 }
 
 /*
@@ -78,9 +79,17 @@ body {
 
 .card.match {
     cursor: default;
+    transform: rotateY(360deg);
+    transition: 500ms;
     background: #02ccba;
     font-size: 33px;
-    animation: shake 500ms cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.card.not {
+    cursor: default;
+    background: #ff0000;
+    font-size: 33px;
+    animation: shake 250ms cubic-bezier(.36,.07,.19,.97) both;
     transform: translate3d(0, 0, 0);
 }
 
@@ -128,6 +137,7 @@ body {
     align-items: center;
     justify-content: center;
     margin: 0 2px;
+    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
 }
 
 .moves-panel, .clock {
@@ -165,8 +175,59 @@ input[type=submit] {
     margin: 2px 2px;
     cursor: pointer;
     transition-duration: 0.4s;
+    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
 }
 
 input[type=submit]:hover {
     background-color: #02ccba;
+}
+
+.blinking {
+    animation-name: blink;
+    animation-duration: 0.8s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes blink {
+    0%   {background-color:#2e3d49;}
+    50%  {background-color:#02ccba;}
+    100% {background-color:#2e3d49;}
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-logo {
+    width: 128px;
+    height: auto;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
 }
