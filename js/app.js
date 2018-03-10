@@ -114,51 +114,54 @@ function clickCard(evt) {
 function flipCard(item) {
     let openCard = item.innerHTML;
     let openId = item.getAttribute('id');
+    let openClass = item.getAttribute('class');
 
-    flippedSymbol.push(openCard);
-    flippedId.push(openId);
+    if (openClass !== 'open' && openClass !== 'match' && openClass !== 'not' && openId !== 'deck') {
+        flippedSymbol.push(openCard);
+        flippedId.push(openId);
 
-    // open a second card
-    if (flippedSymbol.length === 2) {
-        moves += 1;
-        regMoves.textContent = moves;
+        // open a second card
+        if (flippedSymbol.length === 2) {
+            moves += 1;
+            regMoves.textContent = moves;
 
-        calcStars();
+            calcStars();
 
-        let secondId = flippedId.pop();
-        let firstId = flippedId.pop();
+            let secondId = flippedId.pop();
+            let firstId = flippedId.pop();
 
-        let firstCard = document.getElementById(firstId);
-        let secondCard = document.getElementById(secondId);
+            let firstCard = document.getElementById(firstId);
+            let secondCard = document.getElementById(secondId);
 
-        // matched cards
-        if (flippedSymbol[0] === flippedSymbol[1]) {
-            matched.push(firstId, secondId);
-            firstCard.classList.remove('open');
-            firstCard.classList.add('match');
-            secondCard.classList.add('match');
-        // not matched
-        } else {
-            secondCard.classList.add('open');
-            secondCard.classList.add('show');
-            setTimeout(() => {
-                firstCard.classList.add('not');
+            // matched cards
+            if (flippedSymbol[0] === flippedSymbol[1]) {
+                matched.push(firstId, secondId);
                 firstCard.classList.remove('open');
-                secondCard.classList.add('not');
-                secondCard.classList.remove('open');
-            }, 500);
-            setTimeout(() => {
-                secondCard.classList.remove('show');
-                firstCard.classList.remove('show');
-                secondCard.classList.remove('not');
-                firstCard.classList.remove('not');
-            }, 750);
+                firstCard.classList.add('match');
+                secondCard.classList.add('match');
+            // not matched
+            } else {
+                secondCard.classList.add('open');
+                secondCard.classList.add('show');
+                setTimeout(() => {
+                    firstCard.classList.add('not');
+                    firstCard.classList.remove('open');
+                    secondCard.classList.add('not');
+                    secondCard.classList.remove('open');
+                }, 500);
+                setTimeout(() => {
+                    secondCard.classList.remove('show');
+                    firstCard.classList.remove('show');
+                    secondCard.classList.remove('not');
+                    firstCard.classList.remove('not');
+                }, 750);
+            }
+            flippedSymbol.length = 0;
+        // open a random card
+        } else {
+            item.classList.add('open');
+            item.classList.add('show');
         }
-        flippedSymbol.length = 0;
-    // open a random card
-    } else {
-        item.classList.add('open');
-        item.classList.add('show');
     }
 }
 
