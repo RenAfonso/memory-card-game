@@ -17,7 +17,7 @@ Please, download or clone this repository and run `index.html` locally.
 
 On run you'll encounter two main areas: the score panel and the deck, in this order.
 
-#### **Score panel**
+#### Score panel
     
     The moves flag counts how many moves you made. Every time you test a pair of cards for a match, it logs one move.
 
@@ -28,7 +28,7 @@ On run you'll encounter two main areas: the score panel and the deck, in this or
     The new game button resets the above flags, flips all cards back down and reshuffles the deck, thus allowing a new game.
 
 
-#### **Deck**
+#### Deck
 
     You have 16 cards facing down. You goal is to match the pairs by flipping the pair over on the same move.
     
