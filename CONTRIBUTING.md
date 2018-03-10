@@ -1,3 +1,7 @@
 # How to contribute
 
-The files in this repository are used as the starting point for all students. Because we want students to write the majority of the code themselves, pull requests (most likely) will _not_ be merged into the project.
+Even though this is a Udacity project for my Nanodegree, I plan on allowing my children to play this web app. Adding the two features in the [README.md](README.md) is what I'm looking for.
+
+I'll also accept any group of 8 images suitable for children (Paw Patrol, Mickey and Friends, etc.) already sized for this app - 125px per card.
+
+If you want to contribute, and all help is appreciated, please contact me before the pull request. Also, please don't use any colors besides the ones already in the `app.css` file.
