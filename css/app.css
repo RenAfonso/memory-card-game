@@ -184,18 +184,6 @@ body {
     background-color: #02ccba;
 }
 
-.blinking {
-    animation-name: blink;
-    animation-duration: 0.8s;
-    animation-iteration-count: infinite;
-}
-
-@keyframes blink {
-    0%   {background-color:#2e3d49;}
-    50%  {background-color:#02ccba;}
-    100% {background-color:#2e3d49;}
-}
-
 /* 
  * Styles for the modal
  */
