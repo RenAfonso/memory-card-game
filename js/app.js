@@ -82,6 +82,8 @@ function rebuild() {
 
 function resetVariables () {
     matched = [];
+    flippedId = [];
+    flippedSymbol = [];
     flipFirst = 1;
     moves = 0;
     seconds = 0;
