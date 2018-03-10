@@ -131,12 +131,10 @@ function flipCard(item) {
 
         // matched cards
         if (flippedSymbol[0] === flippedSymbol[1]) {
+            matched.push(firstId, secondId);
             firstCard.classList.remove('open');
             firstCard.classList.add('match');
             secondCard.classList.add('match');
-            matched.push(firstId, secondId);
-            firstCard.removeEventListener('click', clickCard);
-            secondCard.removeEventListener('click', clickCard);
         // not matched
         } else {
             secondCard.classList.add('open');
@@ -205,7 +203,7 @@ function end() {
     const star = '<i class="fa fa-star"></i>';
 
     if (moves >= 24) {
-        finalStars = '';
+        finalStars = '0 stars';
     } else if (moves >= 20) {
         finalStars = star;
     } else if (moves >= 14) {

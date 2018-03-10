@@ -17,7 +17,7 @@ body {
 }
 
 body {
-    background: #ffffff url('../img/geometry2.png'); /* Background pattern from Subtle Patterns */
+    background: #ffffff url('../img/field.png'); /* Background pattern from Subtle Patterns */
     font-family: 'Coda', cursive;
 }
 
@@ -29,7 +29,6 @@ body {
 }
 
 .title {
-    font-family: Monoton;
     font-size: 65px;
     color: #2e3d49;
 }
@@ -41,10 +40,10 @@ body {
 .deck {
     width: 660px;
     min-height: 680px;
-    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+    background-color: rgba(170, 126, 205, 0.8);
     padding: 32px;
     border-radius: 10px;
-    box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -71,6 +70,7 @@ body {
     transition: 500ms;
     background: #02b3e4;
     cursor: default;
+    pointer-events: none;
 }
 
 .card.show {
@@ -83,6 +83,7 @@ body {
     transition: 500ms;
     background: #02ccba;
     font-size: 33px;
+    pointer-events: none;
 }
 
 .card.not {
@@ -91,6 +92,7 @@ body {
     font-size: 33px;
     animation: shake 250ms cubic-bezier(.36,.07,.19,.97) both;
     transform: translate3d(0, 0, 0);
+    pointer-events: none;
 }
 
 @keyframes shake {
@@ -159,7 +161,7 @@ body {
     color: #bdbd00;
 }
 
-input[type=submit] {
+.submit {
     cursor: pointer;
     background-color: #2e3d49;
     width: 125px;
@@ -178,7 +180,7 @@ input[type=submit] {
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
 }
 
-input[type=submit]:hover {
+.submit:hover {
     background-color: #02ccba;
 }
 
@@ -194,7 +196,9 @@ input[type=submit]:hover {
     100% {background-color:#2e3d49;}
 }
 
-/* The Modal (background) */
+/* 
+ * Styles for the modal
+ */
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -209,7 +213,6 @@ input[type=submit]:hover {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-/* Modal Content */
 .modal-content {
     background-color: #fefefe;
     margin: auto;
@@ -220,6 +223,7 @@ input[type=submit]:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
 }
 
 .modal-logo {
@@ -230,4 +234,5 @@ input[type=submit]:hover {
 .buttons {
     display: flex;
     justify-content: space-between;
+    width: 65%;
 }
