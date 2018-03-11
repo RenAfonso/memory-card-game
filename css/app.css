@@ -18,6 +18,7 @@ body {
 
 body {
     background: #ffffff url('../img/field.png');
+    background-size: cover;
     font-family: 'Coda', cursive;
 }
 
